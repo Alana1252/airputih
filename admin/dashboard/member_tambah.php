@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
       } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
-      }
+      }g
     } else {
       echo "Sorry, there was an error uploading your file.";
     }
