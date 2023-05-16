@@ -41,30 +41,29 @@ $conn->close();
 ?>
 
 
-
-<!-- HTML form with Bootstrap styling -->
-    <html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contoh Form Upload</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Form Upload</h2>
+    <!-- Form upload dan elemen pesan -->
+    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
 
-    <!-- Bootstrap -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
-    <!-- Data Tables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
-    <!-- Font Google -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-    <!-- Own CSS -->
-    <link rel="stylesheet" href="css/style.css">
-<form method="post" enctype="multipart/form-data" class="align-content-xl-center">
-<!---ATAS-->
-<?php include_once '../navbar.php'; ?>
+    <!-- Elemen pesan -->
+    <div id="message" class="alert alert-dismissible fade show" style="position: fixed; top: 20px; right: 20px; display: none;">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <span id="message-text"></span>
+    </div>
+  </div>
 <div class="form-row ml-5 mt-1 justify-content-center">
     <div class="col-md-2 mb-3 my-1">
       <label for="nama">Nama :</label>
@@ -143,14 +142,49 @@ $conn->close();
 </div>
  <div class="form-row row justify-content-center">
     <div class="form-group col-md-4 ml-2 mr-1 mt-2">
-      <label for="photo">Photo:</label>
-      <input type="file" class="form-control-file" id="photo" name="photo" onchange="uploadFile(this)">
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" class="form-control form-control-file" id="photo" name="photo" onchange="uploadFile(this)">
   <progress class="upload-progress col-md-5 ml-1" id="progressbar" value="0" max="100"></progress>
   <span id="progress-label">0%</span>
-    </div>
+    </div></div>
 
   <div class="form-group col-md-1 ml-5 mt-4">
   <button type="submit" class="btn btn-primary">Submit</button>
 </div>
 </div>
 </form>
+
+
+  <!-- Script untuk menampilkan pesan fade in dan fade out -->
+  <script>
+    $(document).ready(function() {
+      // Fade in pesan
+      function showMessage(message, className) {
+        $('#message-text').text(message);
+        $('#message').addClass(className).fadeIn();
+
+        // Menghilangkan pesan setelah 5 detik
+        setTimeout(function() {
+          $('#message').fadeOut();
+        }, 5000);
+      }
+
+      // Validasi file size dan format
+      $('#photo').change(function() {
+        var file = this.files[0];
+        var fileSize = file.size;
+        var fileType = file.type;
+        var validFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+
+        if (fileSize > 500000) {
+          showMessage('Sorry, your file is too large.', 'alert-danger');
+          $(this).val('');
+        } else if (!validFormats.includes(fileType)) {
+          showMessage('Sorry, only JPG, JPEG, and PNG files are allowed.', 'alert-danger');
+          $(this).val('');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

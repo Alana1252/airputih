@@ -29,3 +29,29 @@
     xhr.send(formData);
   }
 </script>
+
+<script>
+  var fileInput = document.getElementById('photo');
+  var progressBar = document.querySelector('.progress-bar');
+
+  fileInput.addEventListener('change', function() {
+    var file = this.files[0];
+    var fileSize = file.size;
+
+    var reader = new FileReader();
+
+    reader.onloadend = function() {
+      // Mengupdate nilai progress bar saat proses upload berlangsung
+      var progress = Math.round((reader.loaded / fileSize) * 100);
+      progressBar.style.width = progress + '%';
+      progressBar.innerHTML = progress + '%';
+
+      if (progress === 100) {
+        progressBar.innerHTML = 'Upload Complete';
+      }
+    }
+
+    reader.readAsDataURL(file);
+  });
+</script>
+
